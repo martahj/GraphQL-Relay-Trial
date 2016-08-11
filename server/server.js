@@ -1,12 +1,17 @@
 import express from 'express';
-const app = express();
+const routes = express.Router();
 
-console.log('did not error!');
+routes.use('*', (req, res) => {
+  res.send('hi!').end();
+})
 
 if (process.env !== 'test') {
+
+  const app = express().use('/', routes);
+
   const port = 7000;
   app.listen(port);
   console.log('Successfully listening on port', port);
-} else {
-  //
 }
+
+export default routes;

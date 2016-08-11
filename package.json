@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "node server/app.js"
+    "start": "nodemon server/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +17,7 @@
     "chai": "^3.5.0",
     "express": "^4.14.0",
     "mocha": "^3.0.2",
+    "nodemon": "^1.10.0",
     "webpack": "^1.13.1"
   }
 }
