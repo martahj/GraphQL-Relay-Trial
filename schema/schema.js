@@ -6,6 +6,7 @@ import {
   GraphQLInt,
   GraphQLNonNull
 } from 'graphql';
+import helpers from './schemaHelpers.js';
 
 /*
 
@@ -38,10 +39,10 @@ import {
   }
 
   type Query {
-    pokemon (id: String!): Pokemon
-    element (id: String!): Element
-    previousEvolution (id: String!): Pokemon
-    nextEvolution (id: String!): [Pokemon] //this is an array to deal with special case Eevee
+    pokemon (id: Integer!): Pokemon
+    element (id: Integer!): Element
+    previousEvolution (id: Integer!): Pokemon
+    nextEvolution (id: Integer!): [Pokemon] //this is an array to deal with special case Eevee
   }
 
  */
@@ -83,7 +84,7 @@ const basicPokemonType = new GraphQLObjectType({
     },
     family: {
       type: new GraphQLList(pokemonInterface),
-      description: 'All pokemon this pokemon could one day become'
+      description: 'All pokemon that this pokemon could one day become'
     }
   })
 });
@@ -138,12 +139,53 @@ const elementType = new GraphQLObjectType({
   })
 });
 
-// const queryType = new GraphQLObjectType({
-//   name: 'Query',
-//   fields: () => ({
-//
-//   })
-// })
+const queryType = new GraphQLObjectType({
+  name: 'Query',
+  fields: () => ({
+    pokemon: {
+      type: pokemonInterface,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'id of the pokemon'
+        }
+      },
+      resolve: (root, { id }) => helpers.getPokemon(id)
+    },
+    element: {
+      type: elementType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'id of the element'
+        }
+      },
+      resolve: (root, { id }) => helpers.getElement(id)
+    },
+    previousEvolution: {
+      type: pokemonInterface,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'id of the pokemon'
+        }
+      },
+      resolve: (root, { id }) => helpers.getPreviousEvolution(id)
+    },
+    nextEvolution: {
+      type: new GraphQLList(pokemonInterface),
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'id of the pokemon'
+        }
+      },
+      resolve: (root, { id }) => helpers.getNextEvolution(id)
+    }
+  })
+})
 
-
-export default schema;
+export default new GraphQLSchema({
+  query: queryType,
+  types: [basicPokemonType, evolvedPokemonType, elementType]
+})
