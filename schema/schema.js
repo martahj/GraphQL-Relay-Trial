@@ -2,8 +2,10 @@ import {
   graphql,
   GraphQLSchema,
   GraphQLObjectType,
+  GraphQLInterfaceType,
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
   GraphQLNonNull
 } from 'graphql';
 import helpers from './schemaHelpers.js';
@@ -67,7 +69,7 @@ const pokemonInterface = new GraphQLInterfaceType({
 });
 
 const basicPokemonType = new GraphQLObjectType({
-  name: 'Basic Pokemon',
+  name: 'BasicPokemon',
   description: 'A pokemon, as it exists at the beginning of its life',
   fields: () => ({
     id: {
@@ -90,7 +92,7 @@ const basicPokemonType = new GraphQLObjectType({
 });
 
 const evolvedPokemonType = new GraphQLObjectType({
-  name: 'Evolved Pokemon',
+  name: 'EvolvedPokemon',
   description: 'A pokemon that was once a different pokemon',
   fields: () => ({
     id: {
@@ -129,7 +131,7 @@ const elementType = new GraphQLObjectType({
       description: 'What the element is called'
     },
     weakAgainst: {
-      type: new GraphQList(elementType),
+      type: new GraphQLList(elementType),
       description: 'Attack types that will be super effective against pokemon of this type'
     },
     strongAgainst: {

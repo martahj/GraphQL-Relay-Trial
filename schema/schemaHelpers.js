@@ -2,7 +2,7 @@ import { findPokemonById, findElementById, getPreviousEvolution, getNextEvolutio
 
 export default {
   getPokemon: (id) => findPokemonById(id),
-  getElement(id) => findElementById(id),
-  getPreviousEvolution(id) => getPreviousEvolution(id),
-  getNextEvolution(id) => getNextEvolution(id) =>
+  getElement: (id) => findElementById(id),
+  getPreviousEvolution: (id) => getPreviousEvolution(id),
+  getNextEvolution: (id) => getNextEvolution(id)
 }
