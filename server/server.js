@@ -1,7 +1,6 @@
 import express from 'express';
-// import expressGraphql from 'express-graphql';
 import bodyParser from 'body-parser';
-import graphql from 'graphql';
+import { graphql } from 'graphql';
 
 import schema from '../schema/schema.js';
 
@@ -9,8 +8,9 @@ import schema from '../schema/schema.js';
   Configure routes
 */
 const routes = express.Router();
-routes.use(bodyParser.urlencoded({extended:false}));
-routes.use(bodyParser.json());
+// routes.use(bodyParser.urlencoded({extended:false}));
+// routes.use(bodyParser.json());
+routes.use(bodyParser.text({ type: 'application/graphql' }));
 
 routes.use('/', (req, res, next) => {
   console.log('got req', req.url);
@@ -21,8 +21,10 @@ routes.use('/', (req, res, next) => {
 /*
   GraphQL Endpoints
  */
-routes.use('/graphql', (req, res) => {
-  graphql(schema, req.body)
+routes.post('/graphql', (req, res) => {
+  let query = req.body;
+  console.log('grabbed query', query);
+  graphql(schema, query)
   .then( result => {
     console.log('got graphql result!', result);
     res.send(JSON.stringify(result, null, 2));

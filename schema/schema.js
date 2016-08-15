@@ -144,6 +144,13 @@ const elementType = new GraphQLObjectType({
 const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
+    count: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: () => {
+        console.log('in count resolve function');
+        return 150;
+      }
+    },
     pokemon: {
       type: pokemonInterface,
       args: {
