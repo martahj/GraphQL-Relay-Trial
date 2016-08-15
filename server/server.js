@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphql } from 'graphql';
+import path from 'path';
 
 import schema from '../schema/schema.js';
 
@@ -8,14 +9,23 @@ import schema from '../schema/schema.js';
   Configure routes
 */
 const routes = express.Router();
-// routes.use(bodyParser.urlencoded({extended:false}));
-// routes.use(bodyParser.json());
-routes.use(bodyParser.text({ type: 'application/graphql' }));
+
 
 routes.use('/', (req, res, next) => {
   console.log('got req', req.url);
   next();
 })
+
+routes.use(express.static('./client/public/'));
+
+routes.get('/bundle.js', (req, res) => {
+  let bundle = path.join(__dirname, '../', '/builds', 'bundle.js');
+  res.sendFile(bundle);
+})
+
+// routes.use(bodyParser.urlencoded({extended:false}));
+// routes.use(bodyParser.json());
+routes.use(bodyParser.text({ type: 'application/graphql' }));
 
 
 /*
