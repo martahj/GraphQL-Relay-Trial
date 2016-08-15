@@ -25,22 +25,28 @@ pokemon.set(135, { id: 135, name: 'Flareon', type: [2], evolvesFrom: 133, evolve
 pokemon.set(136, { id: 136, name: 'Jolteon', type: [4], evolvesFrom: 133, evolvesInto: null });
 
 const dataFetchers = {
-  findPokemonById: (id) => new Promise( (resolve, reject) => {
-    let myPokemon = pokemon.get(id);
-    if (myPokemon) {
-      resolve(myPokemon);
-    } else {
-      reject(undefined)
-    }
-  }),
-  findElementById: (id) => new Promise( (resolve, reject) => {
-    let foundElement = elements.get(id);
-    if (foundElement) {
-      resolve(foundElement);
-    } else {
-      reject(undefined);
-    }
-  }),
+  // findPokemonById: (id) => new Promise( (resolve, reject) => {
+  //   console.log('trying to find pokemon', id);
+  //   let myPokemon = pokemon.get(id);
+  //   console.log('myPokemon', myPokemon);
+  //   if (myPokemon) {
+  //     console.log('about to resolve', myPokemon);
+  //     resolve(myPokemon);
+  //   } else {
+  //     console.log('about to reject');
+  //     reject(undefined)
+  //   }
+  // }),
+  findPokemonById: (id) => pokemon.get(id),
+  // findElementById: (id) => new Promise( (resolve, reject) => {
+  //   let foundElement = elements.get(id);
+  //   if (foundElement) {
+  //     resolve(foundElement);
+  //   } else {
+  //     reject(undefined);
+  //   }
+  // }),
+  findElementById: (id) => elements.get(id),
   getPreviousEvolution: (id) => new Promise( (resolve, reject) => {
     let myPokemon = pokemon.get(id);
     if (!myPokemon) {
@@ -65,3 +71,5 @@ const dataFetchers = {
   })
 
 }
+
+export default dataFetchers;

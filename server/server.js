@@ -23,11 +23,11 @@ routes.use('/', (req, res, next) => {
  */
 routes.post('/graphql', (req, res) => {
   let query = req.body;
-  console.log('grabbed query', query);
   graphql(schema, query)
   .then( result => {
     console.log('got graphql result!', result);
-    res.send(JSON.stringify(result, null, 2));
+    res.send(result);
+    // res.send(JSON.stringify(result, null, 2));
   })
 })
 

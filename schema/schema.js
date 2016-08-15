@@ -48,25 +48,25 @@ import helpers from './schemaHelpers.js';
   }
 
  */
-
-const pokemonInterface = new GraphQLInterfaceType({
-  name: 'Pokemon',
-  description: 'A pocket monster',
-  fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'The numberical id assigned to a Pokemon'
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'The only word a pokemon can say'
-    },
-    type: {
-      type: new GraphQLList(elementType),
-      description: 'The element(s) the pokemon has special abilities related to'
-    }
-  })
-});
+ const pokemonInterface = new GraphQLInterfaceType({
+   name: 'Pokemon',
+   description: 'A pocket monster',
+   fields: () => ({
+     id: {
+       type: new GraphQLNonNull(GraphQLInt),
+       description: 'The numberical id assigned to a Pokemon'
+     },
+     name: {
+       type: new GraphQLNonNull(GraphQLString),
+       description: 'The only word a pokemon can say'
+     },
+     type: {
+       type: new GraphQLList(elementType),
+       description: 'The element(s) the pokemon has special abilities related to'
+     },
+     resolveType: pokemon => resolve(pokemon) => pokemonType(pokemon)
+   })
+ });
 
 const basicPokemonType = new GraphQLObjectType({
   name: 'BasicPokemon',
@@ -142,7 +142,7 @@ const elementType = new GraphQLObjectType({
 });
 
 const queryType = new GraphQLObjectType({
-  name: 'Query',
+  name: 'RootQueryType',
   fields: () => ({
     count: {
       type: new GraphQLNonNull(GraphQLInt),
@@ -159,7 +159,15 @@ const queryType = new GraphQLObjectType({
           description: 'id of the pokemon'
         }
       },
-      resolve: (root, { id }) => helpers.getPokemon(id)
+      resolve: (root, { id }) => {
+        // console.log('in resolve function', root, id);
+        return { id: 1, name: 'Bulbasaur'}
+        // return 'hi';
+        // console.log('in resolve, root is', root);
+        // let pokemon = helpers.getPokemon(id);
+        // console.log('got pokemon', pokemon);
+        // return pokemon;
+      }
     },
     element: {
       type: elementType,
@@ -193,6 +201,10 @@ const queryType = new GraphQLObjectType({
     }
   })
 })
+
+function pokemonType (pokemon) {
+  return pokemon.evolvesFrom ? evolvedPokemonType : basicPokemonType
+}
 
 export default new GraphQLSchema({
   query: queryType,
