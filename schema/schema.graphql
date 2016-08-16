@@ -3,14 +3,14 @@ schema {
 }
 
 type Element {
-  id: Int!
+  id: String!
   name: String!
   weakAgainst: [Element]
   strongAgainst: [Element]
 }
 
 type Pokemon {
-  id: Int!
+  id: String!
   name: String!
   type: [Element]
   evolvesFrom: Pokemon
@@ -18,13 +18,13 @@ type Pokemon {
 }
 
 type RootQueryType {
-  count: Int!
-  viewer(id: Int!): Viewer
-  pokemon(id: Int!): Pokemon
-  element(id: Int!): Element
+  count: String!
+  viewer(id: String!): Viewer
+  pokemon(id: String!): Pokemon
+  element(id: String!): Element
 }
 
 type Viewer {
-  id: Int!
-  pokemon(id: Int!): Pokemon
+  id: String!
+  pokemon(id: String!): Pokemon
 }

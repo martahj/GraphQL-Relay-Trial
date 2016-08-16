@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 // import Pokemon from './components/pokemon';
+const POKEMON_ID = 1;
 
 class App extends Component {
 
@@ -10,7 +11,7 @@ class App extends Component {
   }
 
   render() {
-    console.log('props', this.props, this.props.pokemon);
+    console.log('props', this.props);
     console.log('viewer props', this.props.viewer);
     console.log('viewer pokemon', this.props.viewer.pokemon);
     return (
@@ -23,11 +24,15 @@ class App extends Component {
 }
 
 export default Relay.createContainer(App, {
+  initialVariables: {
+    id: '2'
+  },
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
         id
-        pokemon(id: 1) {
+        pokemon(id: $id) {
+          id
           name
         }
       }

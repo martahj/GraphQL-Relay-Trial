@@ -121,6 +121,7 @@ const viewerType = new GraphQLObjectType({
       },
       resolve: (person, otherArgs ) => {
         let pokemonId = otherArgs.id;
+        console.log('pokemonId', pokemonId, 'of type', typeof pokemonId);
         return helpers.getPokemon(pokemonId);
       }
     }
