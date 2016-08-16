@@ -2,33 +2,40 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Relay from 'react-relay';
 import Pokemon from './components/pokemon';
+import Prevolutions from './components/prevolutions'
+
+const POKEMON_ID = '133';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.setPokemon = this.setPokemon.bind(this);
   }
 
-  setPokemon(id) {
-    this.props.relay.setVariables({
-      pokemonId: id
-    })
+  renderPrevolution (prevolution) {
+    console.log('prevoltuion', prevolution);
+    if (prevolution) {
+      return (
+        <div>
+          <h3>Evolves from::</h3>
+          <Pokemon pokemon={prevolution}/>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h3>Does not evolve from anything</h3>
+        </div>
+      )
+    }
   }
 
   render() {
-    console.log('props', this.props);
-    console.log('relay', this.props.relay);
-    console.log('viewer props', this.props.viewer);
-    console.log('viewer pokemon', this.props.viewer.pokemon);
-    // window.setTimeout( () => {
-    //   console.log('about to set timeout', this.setPokemon);
-    //   this.setPokemon("1")
-    // }, 2000);
+    console.log('app pokemon', this.props.viewer.pokemon);
     return (
       <div className="bucket">
-        World says hi
-        <h1>Number: {this.props.viewer.id}</h1>
+        <h1>Welcome to the most beautifully styled app you've ever seen</h1>
+        <h5>World says hi back</h5>
         <Pokemon pokemon={this.props.viewer.pokemon}/>
       </div>
     )
@@ -37,16 +44,14 @@ class App extends Component {
 
 export default Relay.createContainer(App, {
   initialVariables: {
-    pokemonId: '2'
+    pokemonId: POKEMON_ID
   },
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
-        id
         pokemon(id: $pokemonId) {
-          id
-          name
           ${Pokemon.getFragment('pokemon')}
+          ${Prevolutions.getFragment('pokemon')}
         }
       }
     `

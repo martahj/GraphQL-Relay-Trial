@@ -1,44 +1,33 @@
 import React, { Component } from 'react';
+import Relay from 'react-relay';
 
-class PokemonCard extends Component () {
+class PokemonCard extends Component {
 
-  componentWillReceiveProps ({pokemon}) {
-    console.log('pokemon', pokemon);
-    this.state.set({ pokemon });
-    let isBasicPokemon = !!pokemon.evolvedFrom;
-    this.state.set({ isBasicPokemon });
+  constructor(props) {
+    super(props);
   }
 
-  renderEvolutionPart () {
-    if (this.state.isBasicPokemon) {
-      let { family } = this.state.pokemon;
-    } else {
-      let { evolvedFrom, evolvesInto } = this.state.pokemon;
-    }
-  }
-
-  renderTypes () {
-    let { types } = this.props.pokemon;
-    let typesText = types.length === 1 ? 'Type: ' + types[0] : 'Types: ' + types.join(' | ');
-    return(
-      <h4>{typesText}</h4>
-    )
-  }
-
-  handleClick(e) {
-    let id = { this.state.pokemon };
-    //change top-level pokemon
-  }
-
-  render () {
-    let pokemon = this.props.pokemon;
-
+  render() {
+    console.log('props pokemoncard', this.props);
+    let typesArray = this.props.pokemon.type  || [];
+    let typelist = typesArray.map( type => type.name ).join('-');
     return (
-      <div onClick={ ()=> this.handleClick() }>
-        <h3>Name : {pokemon.name}</h3>
-        <h3>Number : {pokemon.id}</h3>
-        <h4>{this.renderTypes()}</h4>
-      </div>
+      <li className="pokemonCard">
+        Name: {this.props.pokemon.name} | Number: {this.props.pokemon.id} | Type(s): {typelist}
+      </li>
     )
   }
 }
+export default Relay.createContainer(PokemonCard, {
+  fragments: {
+    pokemon: () => Relay.QL`
+      fragment on Pokemon {
+        name
+        id
+        type {
+          name
+        }
+      }
+    `
+  }
+})
