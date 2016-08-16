@@ -48,7 +48,27 @@ import helpers from './schemaHelpers.js';
   }
 
  */
- const pokemonInterface = new GraphQLInterfaceType({
+ // const pokemonInterface = new GraphQLInterfaceType({
+ //   name: 'Pokemon',
+ //   description: 'A pocket monster',
+ //   fields: () => ({
+ //     id: {
+ //       type: new GraphQLNonNull(GraphQLInt),
+ //       description: 'The numberical id assigned to a Pokemon'
+ //     },
+ //     name: {
+ //       type: new GraphQLNonNull(GraphQLString),
+ //       description: 'The only word a pokemon can say'
+ //     },
+ //     type: {
+ //       type: new GraphQLList(elementType),
+ //       description: 'The element(s) the pokemon has special abilities related to'
+ //     },
+ //   }),
+ //   resolveType: pokemon => pokemon.evolvesFrom ? evolvedPokemonType : basicPokemonType
+ // });
+
+ const pokemonType = new GraphQLObjectType({
    name: 'Pokemon',
    description: 'A pocket monster',
    fields: () => ({
@@ -62,63 +82,21 @@ import helpers from './schemaHelpers.js';
      },
      type: {
        type: new GraphQLList(elementType),
-       description: 'The element(s) the pokemon has special abilities related to'
+       description: 'The element(s) the pokemon has special abilities related to',
+       resolve: pokemon => pokemon.type.map( id => helpers.getElement(id) )
      },
-   }),
-   resolveType: pokemon => pokemon.evolvesFrom ? evolvedPokemonType : basicPokemonType
- });
-
-const basicPokemonType = new GraphQLObjectType({
-  name: 'BasicPokemon',
-  description: 'A pokemon, as it exists at the beginning of its life',
-  fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'The numberical id assigned to a Pokemon'
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'The only word a pokemon can say'
-    },
-    type: {
-      type: new GraphQLList(elementType),
-      description: 'The element(s) the pokemon has special abilities related to'
-    },
-    family: {
-      type: new GraphQLList(pokemonInterface),
-      description: 'All pokemon that this pokemon could one day become'
-    }
-  }),
-  interfaces: [pokemonInterface]
-});
-
-const evolvedPokemonType = new GraphQLObjectType({
-  name: 'EvolvedPokemon',
-  description: 'A pokemon that was once a different pokemon',
-  fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'The numberical id assigned to a Pokemon'
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'The only word a pokemon can say'
-    },
-    type: {
-      type: new GraphQLList(elementType),
-      description: 'The element(s) the pokemon has special abilities related to'
-    },
-    evolvesFrom: {
-      type: new GraphQLNonNull(pokemonInterface),
-      description: 'The immediately prior pokemon in the evolution chain'
-    },
-    evolvesInto: {
-      type: evolvedPokemonType,
-      description: 'The next pokemon in the evolution chain, if one exists'
-    }
-  }),
-  interfaces: [pokemonInterface]
-});
+     evolvesFrom: {
+       type: pokemonType,
+       description: 'The pokemon that evolved into the current one, if any',
+       resolve: pokemon => helpers.getPokemon(pokemon.evolvesFrom)
+     },
+     evolvesInto: {
+       type: new GraphQLList(pokemonType),
+       description: 'The next pokemon in the evolution chain',
+       resolve: pokemon => pokemon.evolvesInto.map( id => helpers.getPokemon(id) )
+     }
+   })
+ })
 
 const elementType = new GraphQLObjectType({
   name: 'Element',
@@ -134,11 +112,13 @@ const elementType = new GraphQLObjectType({
     },
     weakAgainst: {
       type: new GraphQLList(elementType),
-      description: 'Attack types that will be super effective against pokemon of this type'
+      description: 'Attack types that will be super effective against pokemon of this type',
+      resolve: element => element.weakAgainst.map( id => helpers.getElement(id) )
     },
     strongAgainst: {
       type: new GraphQLList(elementType),
-      description: 'Pokemon types that attacks of this element will be super effective against'
+      description: 'Pokemon types that attacks of this element will be super effective against',
+      resolve: element => element.strongAgainst.map( id => helpers.getElement(id) )
     }
   })
 });
@@ -149,12 +129,11 @@ const queryType = new GraphQLObjectType({
     count: {
       type: new GraphQLNonNull(GraphQLInt),
       resolve: () => {
-        console.log('in count resolve function');
         return 150;
       }
     },
     pokemon: {
-      type: pokemonInterface,
+      type: pokemonType,
       args: {
         id: {
           type: new GraphQLNonNull(GraphQLInt),
@@ -171,39 +150,12 @@ const queryType = new GraphQLObjectType({
           description: 'id of the element'
         }
       },
-      resolve: (root, { id }) => {
-        console.log('in resolve function for element', id);
-        helpers.getElement(id)
-      }
-    },
-    previousEvolution: {
-      type: pokemonInterface,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLInt),
-          description: 'id of the pokemon'
-        }
-      },
-      resolve: (root, { id }) => helpers.getPreviousEvolution(id)
-    },
-    nextEvolution: {
-      type: new GraphQLList(pokemonInterface),
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLInt),
-          description: 'id of the pokemon'
-        }
-      },
-      resolve: (root, { id }) => helpers.getNextEvolution(id)
+      resolve: (root, { id }) => helpers.getElement(id)
     }
   })
 })
 
-// function pokemonType (pokemon) {
-//   return pokemon.evolvesFrom ? evolvedPokemonType : basicPokemonType
-// }
-
 export default new GraphQLSchema({
   query: queryType,
-  types: [basicPokemonType, evolvedPokemonType, elementType]
+  types: [pokemonType, elementType]
 })
