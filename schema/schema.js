@@ -54,7 +54,7 @@ import helpers from './schemaHelpers.js';
    description: 'A pocket monster',
    fields: () => ({
      id: {
-       type: new GraphQLNonNull(GraphQLInt),
+       type: new GraphQLNonNull(GraphQLString),
        description: 'The numberical id assigned to a Pokemon'
      },
      name: {
@@ -84,7 +84,7 @@ const elementType = new GraphQLObjectType({
   description: 'Element attribute of a pokemon',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'Id of the element'
     },
     name: {
@@ -109,14 +109,14 @@ const viewerType = new GraphQLObjectType({
   description: 'A user',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'Id of the person'
     },
     pokemon: {
       type: pokemonType,
       args: {
         id: {
-          type: new GraphQLNonNull(GraphQLInt)
+          type: new GraphQLNonNull(GraphQLString)
         }
       },
       resolve: (person, otherArgs ) => {
@@ -131,14 +131,14 @@ const queryType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: () => ({
     count: {
-      type: new GraphQLNonNull(GraphQLInt),
+      type: new GraphQLNonNull(GraphQLString),
       resolve: () => 150
     },
     viewer: {
       type: viewerType,
       args: {
         id: {
-          type: new GraphQLNonNull(GraphQLInt),
+          type: new GraphQLNonNull(GraphQLString),
           description: 'id of the pokemon'
         }
       },
@@ -148,7 +148,7 @@ const queryType = new GraphQLObjectType({
       type: pokemonType,
       args: {
         id: {
-          type: new GraphQLNonNull(GraphQLInt),
+          type: new GraphQLNonNull(GraphQLString),
           description: 'id of the pokemon'
         }
       },
@@ -158,7 +158,7 @@ const queryType = new GraphQLObjectType({
       type: elementType,
       args: {
         id: {
-          type: new GraphQLNonNull(GraphQLInt),
+          type: new GraphQLNonNull(GraphQLString),
           description: 'id of the element'
         }
       },
@@ -169,5 +169,5 @@ const queryType = new GraphQLObjectType({
 
 export default new GraphQLSchema({
   query: queryType,
-  types: [pokemonType, elementType]
+  types: [pokemonType, elementType, viewerType]
 })
