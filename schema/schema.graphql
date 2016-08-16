@@ -1,0 +1,24 @@
+schema {
+  query: RootQueryType
+}
+
+type Element {
+  id: Int!
+  name: String!
+  weakAgainst: [Element]
+  strongAgainst: [Element]
+}
+
+type Pokemon {
+  id: Int!
+  name: String!
+  type: [Element]
+  evolvesFrom: Pokemon
+  evolvesInto: [Pokemon]
+}
+
+type RootQueryType {
+  count: Int!
+  pokemon(id: Int!): Pokemon
+  element(id: Int!): Element
+}
