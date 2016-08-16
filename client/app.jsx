@@ -7,35 +7,26 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    console.log('app props', this.props);
-    this.state = {pokemonId: 1};
-    this.changePokemon = this.changePokemon.bind(this);
-  }
-
-  changePokemon(newId) {
-    this.setState(pokemonId, newId);
   }
 
   render() {
+    console.log('props', this.props, this.props.pokemon);
     return (
       <div className="bucket">
         World says hi
-        <h1>Number: {this.state.pokemonId}</h1>
+        <h1>Number: {this.props.pokemon.name}</h1>
       </div>
     )
   }
 }
 
 export default Relay.createContainer(App, {
-  initialVariables: {
-    id: this.state.pokemonId
-  },
   fragments: {
     pokemon: () => Relay.QL`
-    fragment on Pokemon() {
-      id
-      name
-    }
-    `,
-  },
+      fragment on Pokemon {
+        id
+        name
+      }
+    `
+  }
 })
