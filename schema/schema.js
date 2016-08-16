@@ -11,20 +11,17 @@ import {
 import helpers from './schemaHelpers.js';
 
 /*
-
   interface Pokemon {
     id: Integer!   //the ! at the end indicates the field is non-nullable
     name: String!
     type: [Element]
   }
-
   type Basic : Pokemon {
     id: Integer!
     name: String!
     type: [Element]
     family: [Pokemon]
   }
-
   type Evolved : Pokemon {
     id: Integer!
     name: String!
@@ -32,21 +29,18 @@ import helpers from './schemaHelpers.js';
     evolvesFrom: String!
     evolvesInto: String   //this field is nullable because some Pokemon are final evolutions
   }
-
   type Element {
     id: Integer!
     name: String!
     weakAgainst: [Element]
     strongAgainst: [Element]
   }
-
   type Query {
     pokemon (id: Integer!): Pokemon
     element (id: Integer!): Element
     previousEvolution (id: Integer!): Pokemon
     nextEvolution (id: Integer!): [Pokemon] //this is an array to deal with special case Eevee
   }
-
  */
 
  const pokemonType = new GraphQLObjectType({

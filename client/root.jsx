@@ -19,7 +19,7 @@ Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer('http://localhost:7000/gr
 
 let rootComponent = <Relay.RootContainer
                       Component={App}
-                      route={new PokemonRoute({viewerId: '1'})}
+                      route={new PokemonRoute({viewerId: 'user'})}
                     />
 let rootNode = document.getElementById('root');
 ReactDOM.render(rootComponent, rootNode);
