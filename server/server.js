@@ -18,9 +18,9 @@ routes.use(bodyParser.json());
 
 routes.use('/', (req, res, next) => {
   console.log('got req', req.url);
-  console.log('got req body', req.body);
-  console.log('got req body query', req.body.query);
-  console.log('got req query', req.query);
+  // console.log('got req body', req.body);
+  // console.log('got req body query', req.body.query);
+  // console.log('got req query', req.query);
   next();
 })
 
@@ -35,21 +35,6 @@ routes.use('/graphql', expressGraphql({
   schema: schema,
   graphiql: false
 }));
-
-// routes.post('/graphql', (req, res) => {
-//   console.log('in graphql route');
-//   console.log('req body', req.body);
-//   console.log('req body query', req.body.query);
-//   console.log('req query', req.query);
-//   let query = req.body;
-//
-//   graphql(schema, query)
-//   .then( result => {
-//     console.log('got graphql result!', result);
-//     // res.send(result);
-//     res.send(JSON.stringify(result, null, 2));
-//   })
-// })
 
 /*
   API

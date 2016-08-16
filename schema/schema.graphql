@@ -19,6 +19,12 @@ type Pokemon {
 
 type RootQueryType {
   count: Int!
+  viewer(id: Int!): Viewer
   pokemon(id: Int!): Pokemon
   element(id: Int!): Element
+}
+
+type Viewer {
+  id: Int!
+  pokemon(id: Int!): Pokemon
 }

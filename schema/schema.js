@@ -48,25 +48,6 @@ import helpers from './schemaHelpers.js';
   }
 
  */
- // const pokemonInterface = new GraphQLInterfaceType({
- //   name: 'Pokemon',
- //   description: 'A pocket monster',
- //   fields: () => ({
- //     id: {
- //       type: new GraphQLNonNull(GraphQLInt),
- //       description: 'The numberical id assigned to a Pokemon'
- //     },
- //     name: {
- //       type: new GraphQLNonNull(GraphQLString),
- //       description: 'The only word a pokemon can say'
- //     },
- //     type: {
- //       type: new GraphQLList(elementType),
- //       description: 'The element(s) the pokemon has special abilities related to'
- //     },
- //   }),
- //   resolveType: pokemon => pokemon.evolvesFrom ? evolvedPokemonType : basicPokemonType
- // });
 
  const pokemonType = new GraphQLObjectType({
    name: 'Pokemon',
@@ -123,14 +104,45 @@ const elementType = new GraphQLObjectType({
   })
 });
 
+const viewerType = new GraphQLObjectType({
+  name: 'Viewer',
+  description: 'A user',
+  fields: () => ({
+    id: {
+      type: new GraphQLNonNull(GraphQLInt),
+      description: 'Id of the person'
+    },
+    pokemon: {
+      type: pokemonType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt)
+        }
+      },
+      resolve: (person, otherArgs ) => {
+        let pokemonId = otherArgs.id;
+        return helpers.getPokemon(pokemonId);
+      }
+    }
+  })
+})
+
 const queryType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: () => ({
     count: {
       type: new GraphQLNonNull(GraphQLInt),
-      resolve: () => {
-        return 150;
-      }
+      resolve: () => 150
+    },
+    viewer: {
+      type: viewerType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLInt),
+          description: 'id of the pokemon'
+        }
+      },
+      resolve: (root, { id }) => helpers.getPerson(id)
     },
     pokemon: {
       type: pokemonType,

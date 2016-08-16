@@ -24,9 +24,13 @@ pokemon.set(134, { id: 134, name: 'Vaporeon', type: [3], evolvesFrom: 133, evolv
 pokemon.set(135, { id: 135, name: 'Flareon', type: [2], evolvesFrom: 133, evolvesInto: [] });
 pokemon.set(136, { id: 136, name: 'Jolteon', type: [4], evolvesFrom: 133, evolvesInto: [] });
 
+const users = new Map();
+users.set(1, { id: 1, pokemon: [...pokemon.keys()] } )
+
 const dataFetchers = {
   findPokemonById: (id) => pokemon.get(id),
-  findElementById: (id) => elements.get(id)
-}
+  findElementById: (id) => elements.get(id),
+  findPersonById: (id) => users.get(id)
+};
 
 export default dataFetchers;
