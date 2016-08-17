@@ -12,23 +12,23 @@ class App extends Component {
     super(props);
   }
 
-  renderPrevolution (prevolution) {
-    console.log('prevoltuion', prevolution);
-    if (prevolution) {
-      return (
-        <div>
-          <h3>Evolves from::</h3>
-          <Pokemon pokemon={prevolution}/>
-        </div>
-      )
-    } else {
-      return (
-        <div>
-          <h3>Does not evolve from anything</h3>
-        </div>
-      )
-    }
-  }
+  // renderPrevolution (prevolution) {
+  //   console.log('prevoltuion', prevolution);
+  //   if (prevolution) {
+  //     return (
+  //       <div>
+  //         <h3>Evolves from::</h3>
+  //         <Pokemon pokemon={prevolution}/>
+  //       </div>
+  //     )
+  //   } else {
+  //     return (
+  //       <div>
+  //         <h3>Does not evolve from anything</h3>
+  //       </div>
+  //     )
+  //   }
+  // }
 
   render() {
     console.log('app pokemon', this.props.viewer.pokemon);
@@ -51,7 +51,6 @@ export default Relay.createContainer(App, {
       fragment on Viewer {
         pokemon(id: $pokemonId) {
           ${Pokemon.getFragment('pokemon')}
-          ${Prevolutions.getFragment('pokemon')}
         }
       }
     `

@@ -6,23 +6,12 @@ import path from 'path';
 
 import schema from '../schema/schema.js';
 
-/*
-  Configure routes
-*/
 const routes = express.Router();
 
 
 routes.use(bodyParser.text({ type: 'application/graphql' }));
 routes.use(bodyParser.urlencoded({extended:false}));
 routes.use(bodyParser.json());
-
-routes.use('/', (req, res, next) => {
-  console.log('got req', req.url);
-  // console.log('got req body', req.body);
-  // console.log('got req body query', req.body.query);
-  // console.log('got req query', req.query);
-  next();
-})
 
 routes.use(express.static('./client/public/'));
 
@@ -36,9 +25,7 @@ routes.use('/graphql', expressGraphql({
   graphiql: false
 }));
 
-/*
-  API
- */
+
 routes.use('*', (req, res) => {
   console.log('in catch-all route');
   res.send('hi!').end();

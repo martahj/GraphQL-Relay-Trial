@@ -1,5 +1,5 @@
 
-const elements = new Map(); //so we can use integers as keys
+const elements = new Map(); 
 elements.set('fafweg', { id: 'fafweg', name: 'grass', weakAgainst: ['fghghq3g'], strongAgainst: ['fghghq3g', 'gaehh', 'hw4j5heahe'] });
 elements.set('fghghq3g', { id: 'fghghq3g', name: 'fire', weakAgainst: ['gaehh', 'hw4j5heahe'], strongAgainst: ['fafweg'] });
 elements.set('gaehh', { id: 'gaehh', name: 'water', weakAgainst: ['fafweg', 'tjjata'], strongAgainst: ['fghghq3g', 'hw4j5heahe'] });
